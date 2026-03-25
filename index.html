@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Echoes – Des moments qui résonnent, puis s'évanouissent</title>
+    <meta name="description" content="Echoes est le premier réseau social où chaque vue compte. Vos contenus disparaissent après un nombre défini de vues. Rareté, attention, authenticité.">
+    <meta name="keywords" content="réseau social, contenu éphémère, posts qui disparaissent, rareté, authenticité">
+    <meta name="author" content="Echoes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://echoes.app/">
+    <meta property="og:title" content="Echoes – Des moments qui résonnent">
+    <meta property="og:description" content="Le réseau social où chaque vue compte. Vos contenus disparaissent après un nombre défini de vues.">
+    <meta property="og:image" content="https://echoes.app/assets/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://echoes.app/">
+    <meta property="twitter:title" content="Echoes – Des moments qui résonnent">
+    <meta property="twitter:description" content="Le réseau social où chaque vue compte. Vos contenus disparaissent après un nombre défini de vues.">
+    <meta property="twitter:image" content="https://echoes.app/assets/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="asset/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="asset/images/logo.png" alt="Echoes logo" class="logo-icon">
+                <span class="logo-text">Echoes</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Fonctionnalités</a>
+                <a href="#pricing" class="nav-link">Tarifs</a>
+                <a href="#waitlist" class="nav-link">Liste d'attente</a>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-outline" id="loginBtn">Se connecter</button>
+                <button class="btn btn-primary" id="signupBtn">S'inscrire</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#features" class="mobile-link">Fonctionnalités</a>
+        <a href="#pricing" class="mobile-link">Tarifs</a>
+        <a href="#waitlist" class="mobile-link">Liste d'attente</a>
+        <div class="mobile-buttons">
+            <button class="btn btn-outline w-full">Se connecter</button>
+            <button class="btn btn-primary w-full">S'inscrire</button>
+        </div>
+    </div>
+    
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-pulse"></span>
+                        <span>La rareté fait son retour</span>
+                    </div>
+                    <h1 class="hero-title">
+                        Des moments qui <span class="gradient-text">résonnent</span>
+                        <br>puis s'évanouissent
+                    </h1>
+                    <p class="hero-description">
+                        Echoes est le premier réseau social où chaque vue compte. 
+                        Vos contenus disparaissent après un nombre défini de vues. 
+                        Plus un post est vu, plus vite il meurt. Rareté, attention, authenticité.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-large" id="heroSignupBtn">
+                            Rejoindre la liste d'attente
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn-outline btn-large" id="watchDemoBtn">
+                            Voir la démo
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="waitlistCount">0</span>
+                            <span class="stat-label">en liste d'attente</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">éphémère</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-label">possibilités</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="visual-slider" id="visualSlider">
+                        <div class="slide active" data-slide="1">
+                            <img src="asset/images/Gemini_Generated_Image_k3h1olk3h1olk3h1.png" alt="Echoes app preview - Feed" class="slide-img">
+                            <div class="slide-overlay">
+                                <div class="slide-badge">Post éphémère</div>
+                                <div class="slide-stats">
+                                    <span>🔥 342 vues restantes</span>
+                                    <span>⏱️ 5s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slide" data-slide="2">
+                            <img src="asset/images/Gemini_Generated_Image_hykzhqhykzhqhykz.png" alt="Echoes app preview - Compteur" class="slide-img">
+                            <div class="slide-overlay">
+                                <div class="slide-badge">Compteur unique</div>
+                                <div class="slide-stats">
+                                    <span>👁️ 1 vue = 1 utilisateur</span>
+                                    <span>⚡ Quota personnalisé</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slide" data-slide="3">
+                            <img src="asset/images/Gemini_Generated_Image_4jrfm34jrfm34jrf.png" alt="Echoes app preview - Évaporation" class="slide-img">
+                            <div class="slide-overlay">
+                                <div class="slide-badge">Disparition</div>
+                                <div class="slide-stats">
+                                    <span>🌫️ Post évaporé</span>
+                                    <span>Plus jamais visible</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-controls">
+                        <button class="slider-btn prev" id="prevSlide">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="slider-dots" id="sliderDots">
+                            <span class="dot active" data-dot="1"></span>
+                            <span class="dot" data-dot="2"></span>
+                            <span class="dot" data-dot="3"></span>
+                        </div>
+                        <button class="slider-btn next" id="nextSlide">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="visual-badge">
+                        <span>✨ Chaque vue compte</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Pourquoi Echoes</span>
+                    <h2 class="section-title">Une nouvelle façon de partager</h2>
+                    <p class="section-description">
+                        Nous réinventons les réseaux sociaux en mettant la rareté et l'attention au cœur de l'expérience.
+                    </p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Chaque vue compte</h3>
+                        <p class="feature-description">
+                            Un utilisateur = une vue. Plus de doublons, plus de faux comptages. Chaque visionnage a du poids.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💨</div>
+                        <h3 class="feature-title">Disparition totale</h3>
+                        <p class="feature-description">
+                            Dès le quota atteint, votre post s'évapore. Plus jamais visible. L'éphémère devient précieux.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3 class="feature-title">Modération pré-publication</h3>
+                        <p class="feature-description">
+                            Aucun contenu problématique n'apparaît. Validation avant publication pour un espace sain.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3 class="feature-title">Anti-capture d'écran</h3>
+                        <p class="feature-description">
+                            Technologie avancée pour protéger vos contenus. Ce qui est vu ne peut être volé.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3 class="feature-title">Groupes privés</h3>
+                        <p class="feature-description">
+                            Créez des communautés exclusives avec vos propres règles. Premium uniquement.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Quotas personnalisés</h3>
+                        <p class="feature-description">
+                            Premium : choisissez le nombre exact de vues (1 à 1 000 000). Un contrôle total.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- How It Works -->
+        <section class="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Comment ça marche</span>
+                    <h2 class="section-title">En trois étapes</h2>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">📸</div>
+                        <h3 class="step-title">Créez</h3>
+                        <p class="step-description">Publiez une photo ou une vidéo courte. Choisissez votre quota de vues.</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">✅</div>
+                        <h3 class="step-title">Vérification</h3>
+                        <p class="step-description">Notre système valide votre contenu avant publication. Sécurité d'abord.</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">🌫️</div>
+                        <h3 class="step-title">Disparition</h3>
+                        <p class="step-description">Le post vit jusqu'à épuisement des vues, puis s'évapore à jamais.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pricing Section -->
+        <section id="pricing" class="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Tarifs</span>
+                    <h2 class="section-title">Simple et transparent</h2>
+                    <p class="section-description">
+                        Un modèle freemium pensé pour les créateurs et les communautés.
+                    </p>
+                </div>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-badge">Démarrage</div>
+                        <h3 class="pricing-name">Freemium</h3>
+                        <div class="pricing-price">Gratuit</div>
+                        <ul class="pricing-features">
+                            <li>✅ Posts éphémères</li>
+                            <li>✅ Quotas 100 / 500 / 1000 vues</li>
+                            <li>✅ Rejoindre des groupes</li>
+                            <li>❌ Posts permanents</li>
+                            <li>❌ Création de groupes</li>
+                            <li>❌ Quotas personnalisés</li>
+                        </ul>
+                        <button class="btn btn-outline w-full">Commencer</button>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge">Populaire</div>
+                        <h3 class="pricing-name">Premium</h3>
+                        <div class="pricing-price">4,99 € <span>/mois</span></div>
+                        <div class="pricing-annual">ou 49,99 € / an</div>
+                        <ul class="pricing-features">
+                            <li>✅ Posts éphémères illimités</li>
+                            <li>✅ Quotas personnalisés (1 à 1M)</li>
+                            <li>✅ Posts permanents</li>
+                            <li>✅ Création de groupes illimitée</li>
+                            <li>✅ Groupes mixtes (premium + freemium)</li>
+                            <li>✅ Statistiques avancées</li>
+                            <li>✅ Badge créateur premium</li>
+                        </ul>
+                        <button class="btn btn-primary w-full">S'abonner</button>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="pricing-badge">Collectivité</div>
+                        <h3 class="pricing-name">Enterprise</h3>
+                        <div class="pricing-price">Sur devis</div>
+                        <ul class="pricing-features">
+                            <li>✅ Tout Premium</li>
+                            <li>✅ Marque blanche</li>
+                            <li>✅ Support dédié</li>
+                            <li>✅ API personnalisée</li>
+                            <li>✅ Formation équipe</li>
+                        </ul>
+                        <button class="btn btn-outline w-full">Nous contacter</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Waitlist Section -->
+        <section id="waitlist" class="waitlist">
+            <div class="container">
+                <div class="waitlist-container">
+                    <h2 class="waitlist-title">Soyez parmi les premiers</h2>
+                    <p class="waitlist-description">
+                        Rejoignez la liste d'attente et recevez une invitation prioritaire au lancement.
+                        Les 1000 premiers auront 3 mois de Premium offerts.
+                    </p>
+                    <form class="waitlist-form" id="waitlistForm">
+                        <input type="email" placeholder="votre@email.com" class="waitlist-input" id="waitlistEmail" required>
+                        <button type="submit" class="btn btn-primary btn-large">Rejoindre la liste</button>
+                    </form>
+                    <p class="waitlist-note">
+                        🎁 1000 premiers : 3 mois de Premium offerts
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="asset/images/logo.png" alt="Echoes logo" class="logo-icon">
+                        <span class="logo-text">Echoes</span>
+                    </div>
+                    <p class="footer-description">
+                        Des moments qui résonnent, puis s'évanouissent.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Produit</h4>
+                        <a href="#features">Fonctionnalités</a>
+                        <a href="#pricing">Tarifs</a>
+                        <a href="#waitlist">Liste d'attente</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Légal</h4>
+                        <a href="#">CGU</a>
+                        <a href="#">Confidentialité</a>
+                        <a href="#">Mentions légales</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Social</h4>
+                        <a href="#">Twitter</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">Discord</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Echoes. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="asset/js/main.js"></script>
+</body>
+</html>

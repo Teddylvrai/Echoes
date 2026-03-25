@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Echoes – Démo interactive</title>
+    <link rel="stylesheet" href="asset/css/demo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>📶 🔋 100%</span>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Echoes</div>
+            <div class="header-actions">
+                <button class="icon-btn" id="upgradeBtn" title="Premium">⭐</button>
+                <button class="icon-btn" id="notifBtn">🔔</button>
+            </div>
+        </div>
+
+        <!-- Create Post Bar -->
+        <div class="create-bar" id="createBar">
+            <div class="avatar" id="userAvatar">M</div>
+            <div class="create-input" id="openCreateModal">
+                Créer un post éphémère...
+            </div>
+        </div>
+
+        <!-- Feed -->
+        <div class="feed" id="feed">
+            <!-- Posts will be injected here -->
+        </div>
+    </div>
+
+    <!-- Modal Création Post -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nouveau post</h3>
+                <button class="icon-btn" id="closeModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="media-preview" id="mediaPreview">
+                    <span>📸</span>
+                    <p>Cliquez pour ajouter un média</p>
+                </div>
+                <div class="quota-selector">
+                    <label>Nombre de vues</label>
+                    <div class="quota-options" id="quotaOptions">
+                        <div class="quota-option" data-quota="100">100 vues</div>
+                        <div class="quota-option" data-quota="500">500 vues</div>
+                        <div class="quota-option" data-quota="1000">1000 vues</div>
+                    </div>
+                </div>
+                <div class="premium-note" id="premiumNote">
+                    ⭐ Premium : choisissez n'importe quel nombre de vues (1 à 1M)
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelPost">Annuler</button>
+                <button class="btn btn-primary" id="publishPost">Publier</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="asset/js/script.js"></script>
+</body>
+</html>
