@@ -33,12 +33,10 @@
             </div>
         </div>
 
-        <!-- Create Post Bar -->
-        <div class="create-bar" id="createBar">
-            <div class="avatar" id="userAvatar">M</div>
-            <div class="create-input" id="openCreateModal">
-                Créer un post éphémère...
-            </div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="feed">📱 Feed</button>
+            <button class="tab-btn" data-tab="groups">👥 Groupes</button>
         </div>
 
         <!-- Premium Banner (visible seulement en mode freemium) -->
@@ -58,9 +56,32 @@
             </div>
         </div>
 
+        <!-- Create Post Bar (visible dans l'onglet Feed) -->
+        <div class="create-bar" id="createBar">
+            <div class="avatar" id="userAvatar">M</div>
+            <div class="create-input" id="openCreateModal">
+                Créer un post éphémère...
+            </div>
+        </div>
+
+        <!-- Create Group Bar (visible dans l'onglet Groupes) -->
+        <div class="create-group-bar hidden" id="createGroupBar">
+            <div class="avatar" id="groupAvatar">👥</div>
+            <div class="create-input" id="openCreateGroupModal">
+                Créer un nouveau groupe...
+            </div>
+        </div>
+
         <!-- Feed -->
         <div class="feed" id="feed">
             <!-- Posts will be injected here -->
+        </div>
+
+        <!-- Groups View -->
+        <div class="groups-view hidden" id="groupsView">
+            <div class="groups-list" id="groupsList">
+                <!-- Groups will be injected here -->
+            </div>
         </div>
     </div>
 
@@ -83,16 +104,20 @@
                         <div class="quota-option" data-quota="500">500 vues</div>
                         <div class="quota-option" data-quota="1000">1000 vues</div>
                     </div>
-                    <!-- Premium custom quota input (visible seulement en mode premium) -->
                     <div class="custom-quota-container" id="customQuotaContainer" style="display: none;">
                         <label>Ou personnalisez votre quota (Premium)</label>
                         <input type="number" id="customQuotaInput" placeholder="Ex: 564" min="1" max="1000000" class="custom-quota-input">
                     </div>
                 </div>
+                <div class="group-selector" id="groupSelector">
+                    <label>Publier dans un groupe (optionnel)</label>
+                    <select id="groupSelect" class="group-select">
+                        <option value="">Mon feed public</option>
+                    </select>
+                </div>
                 <div class="premium-note" id="premiumNote">
                     ⭐ Premium : choisissez n'importe quel nombre de vues (1 à 1M)
                 </div>
-                <!-- Permanent post option (Premium only) -->
                 <div class="permanent-option" id="permanentOption" style="display: none;">
                     <label class="permanent-checkbox">
                         <input type="checkbox" id="permanentCheckbox">
@@ -103,6 +128,110 @@
             <div class="modal-footer">
                 <button class="btn btn-outline" id="cancelPost">Annuler</button>
                 <button class="btn btn-primary" id="publishPost">Publier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Création Groupe -->
+    <div class="modal" id="createGroupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nouveau groupe</h3>
+                <button class="icon-btn" id="closeGroupModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="group-field">
+                    <label>Nom du groupe</label>
+                    <input type="text" id="groupNameInput" placeholder="Ex: Photographes, Famille, etc." class="group-input">
+                </div>
+                <div class="group-field">
+                    <label>Description</label>
+                    <textarea id="groupDescInput" placeholder="Décrivez votre groupe..." class="group-textarea" rows="2"></textarea>
+                </div>
+                <div class="group-field">
+                    <label>Visibilité</label>
+                    <div class="visibility-options">
+                        <label class="visibility-option">
+                            <input type="radio" name="visibility" value="public" checked> 🌍 Public
+                        </label>
+                        <label class="visibility-option">
+                            <input type="radio" name="visibility" value="private"> 🔒 Privé
+                        </label>
+                        <label class="visibility-option">
+                            <input type="radio" name="visibility" value="hidden"> 🕶️ Caché
+                        </label>
+                    </div>
+                </div>
+                <div class="premium-group-note" id="premiumGroupNote">
+                    ⭐ Premium : groupes illimités, personnalisation avancée
+                </div>
+                <div class="group-settings-premium" id="groupSettingsPremium" style="display: none;">
+                    <div class="group-field">
+                        <label>⚙️ Personnalisation (Premium)</label>
+                        <div class="premium-settings">
+                            <label class="setting-checkbox">
+                                <input type="checkbox" id="customQuotaGroup"> Quota par défaut personnalisable
+                            </label>
+                            <label class="setting-checkbox">
+                                <input type="checkbox" id="mixedMembers"> Autoriser les membres Freemium
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelGroup">Annuler</button>
+                <button class="btn btn-primary" id="createGroupBtn">Créer le groupe</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Détails Groupe avec Discussion -->
+    <div class="modal" id="groupDetailModal">
+        <div class="modal-content modal-group-detail">
+            <div class="modal-header">
+                <h3 id="groupDetailTitle">Groupe</h3>
+                <button class="icon-btn" id="closeGroupDetailModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Navigation interne du groupe -->
+                <div class="group-inner-tabs">
+                    <button class="group-inner-tab active" data-inner-tab="discussion">💬 Discussion</button>
+                    <button class="group-inner-tab" data-inner-tab="posts">📸 Posts éphémères</button>
+                    <button class="group-inner-tab" data-inner-tab="members">👥 Membres</button>
+                </div>
+
+                <!-- Discussion Tab -->
+                <div class="group-discussion-tab" id="groupDiscussionTab">
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be injected here -->
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chatMessageInput" placeholder="Écrire un message..." class="chat-input">
+                        <button class="chat-send-btn" id="sendChatMessage">Envoyer</button>
+                    </div>
+                </div>
+
+                <!-- Posts Tab -->
+                <div class="group-posts-tab hidden" id="groupPostsTab">
+                    <div class="group-posts-header">
+                        <button class="btn btn-primary btn-sm" id="createGroupPostFromModal">+ Publier un post éphémère</button>
+                    </div>
+                    <div class="group-posts-list" id="groupPostsList">
+                        <!-- Group posts will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Members Tab -->
+                <div class="group-members-tab hidden" id="groupMembersTab">
+                    <div class="group-members-list" id="groupMembersContainer">
+                        <!-- Members will be injected here -->
+                    </div>
+                </div>
+
+                <div class="group-actions" id="groupActions">
+                    <button class="btn btn-outline" id="leaveGroupBtn">Quitter le groupe</button>
+                </div>
             </div>
         </div>
     </div>
