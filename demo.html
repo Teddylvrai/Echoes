@@ -19,8 +19,17 @@
         <div class="header">
             <div class="logo">Echoes</div>
             <div class="header-actions">
-                <button class="icon-btn" id="upgradeBtn" title="Premium">⭐</button>
+                <!-- Premium Switch -->
+                <div class="premium-switch-container">
+                    <span class="switch-label freemium-label">Freemium</span>
+                    <label class="switch">
+                        <input type="checkbox" id="premiumSwitch">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-label premium-label">Premium</span>
+                </div>
                 <button class="icon-btn" id="notifBtn">🔔</button>
+                <button class="icon-btn" id="resetBtn" title="Réinitialiser">🔄</button>
             </div>
         </div>
 
@@ -29,6 +38,23 @@
             <div class="avatar" id="userAvatar">M</div>
             <div class="create-input" id="openCreateModal">
                 Créer un post éphémère...
+            </div>
+        </div>
+
+        <!-- Premium Banner (visible seulement en mode freemium) -->
+        <div class="premium-banner" id="premiumBanner">
+            ⭐ Passez à Premium pour débloquer : quotas personnalisés, groupes illimités, posts permanents
+            <button class="banner-btn" id="bannerUpgradeBtn">Upgrade</button>
+        </div>
+
+        <!-- Premium Features Demo (visible seulement en mode premium) -->
+        <div class="premium-features-demo" id="premiumFeaturesDemo">
+            <div class="premium-demo-card">
+                <span>✨</span>
+                <div>
+                    <strong>Mode Premium actif</strong>
+                    <p>Quotas personnalisés • Groupes illimités • Posts permanents</p>
+                </div>
             </div>
         </div>
 
@@ -57,9 +83,21 @@
                         <div class="quota-option" data-quota="500">500 vues</div>
                         <div class="quota-option" data-quota="1000">1000 vues</div>
                     </div>
+                    <!-- Premium custom quota input (visible seulement en mode premium) -->
+                    <div class="custom-quota-container" id="customQuotaContainer" style="display: none;">
+                        <label>Ou personnalisez votre quota (Premium)</label>
+                        <input type="number" id="customQuotaInput" placeholder="Ex: 564" min="1" max="1000000" class="custom-quota-input">
+                    </div>
                 </div>
                 <div class="premium-note" id="premiumNote">
                     ⭐ Premium : choisissez n'importe quel nombre de vues (1 à 1M)
+                </div>
+                <!-- Permanent post option (Premium only) -->
+                <div class="permanent-option" id="permanentOption" style="display: none;">
+                    <label class="permanent-checkbox">
+                        <input type="checkbox" id="permanentCheckbox">
+                        <span>📌 Post permanent (ne disparaît jamais)</span>
+                    </label>
                 </div>
             </div>
             <div class="modal-footer">

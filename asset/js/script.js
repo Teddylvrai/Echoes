@@ -1,6 +1,5 @@
 // ============================================
-// ECHOES - DEMO INTERACTIVE
-// Après visualisation : le post disparaît pour l'utilisateur
+// ECHOES - DEMO INTERACTIVE AVEC SWITCH FREEMIUM/PREMIUM
 // ============================================
 
 const STORAGE_KEYS = {
@@ -73,6 +72,7 @@ const DEFAULT_USER = {
 let currentUser;
 let posts;
 let viewedPosts;
+let isDemoPremium = false; // État du switch (démo uniquement)
 
 // ============================================
 // PERSISTANCE
@@ -127,7 +127,7 @@ function resetAllData() {
     saveUser();
     renderFeed();
     updateUserAvatar();
-    updatePremiumNote();
+    updatePremiumUI();
     showNotification('🔄 Données réinitialisées ! Les posts sont revenus.', 'success');
 }
 
@@ -146,21 +146,18 @@ function formatTime(isoString) {
     return `il y a ${Math.floor(diff / 1440)}j`;
 }
 
-// Fonction pour qu'un post disparaisse pour l'utilisateur
 function disappearPost(postId) {
     const postCard = document.querySelector(`.post-card[data-post-id="${postId}"]`);
     if (postCard) {
         postCard.classList.add('disappeared');
     }
     
-    // Marquer le post comme vu (pour ne plus le réafficher)
     if (!viewedPosts.includes(postId)) {
         viewedPosts.push(postId);
         saveViewed();
     }
 }
 
-// Fonction pour ajouter une vue et faire disparaître le post
 function addView(postId) {
     if (viewedPosts.includes(postId)) return false;
     
@@ -174,10 +171,8 @@ function addView(postId) {
     savePosts();
     saveViewed();
     
-    // Faire disparaître le post immédiatement après la vue
     disappearPost(postId);
     
-    // Vérifier si le post doit s'évaporer pour tout le monde (si quota atteint)
     if (post.viewCount >= post.viewLimit) {
         post.status = 'evaporated';
         savePosts();
@@ -190,7 +185,6 @@ function addView(postId) {
     return true;
 }
 
-// Fonction pour visualiser un post avec timer
 function viewPost(postId) {
     const post = posts.find(p => p.id === postId);
     if (!post || post.status !== 'active') return;
@@ -208,15 +202,12 @@ function viewPost(postId) {
     
     if (!imageContainer || !postImage) return;
     
-    // Révéler l'image
     postImage.classList.remove('blurred');
     postImage.classList.add('revealed');
     if (overlay) overlay.classList.add('hidden');
     
-    // Désactiver le clic pendant la visualisation
     imageContainer.style.pointerEvents = 'none';
     
-    // Créer l'overlay de timer en coin supérieur droit
     const timerOverlay = document.createElement('div');
     timerOverlay.className = 'timer-overlay';
     timerOverlay.innerHTML = `
@@ -243,15 +234,12 @@ function viewPost(postId) {
             clearInterval(interval);
             timerOverlay.remove();
             imageContainer.style.pointerEvents = '';
-            
-            // Ajouter la vue et faire disparaître le post
             addView(postId);
         }
     }, 1000);
 }
 
-// Fonction pour créer un post
-function createPost(mediaType, viewLimit) {
+function createPost(mediaType, viewLimit, isPermanent = false) {
     const defaultImage = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop';
     
     const newPost = {
@@ -261,13 +249,13 @@ function createPost(mediaType, viewLimit) {
         userAvatar: currentUser.avatar,
         mediaType: mediaType,
         mediaUrl: defaultImage,
-        viewLimit: viewLimit,
+        viewLimit: isPermanent ? null : viewLimit,
         viewCount: 0,
         status: "pending",
         createdAt: new Date().toISOString(),
-        type: "ephemeral",
-        isPremium: currentUser.isPremium,
-        caption: "Mon nouveau post 📸"
+        type: isPermanent ? "permanent" : "ephemeral",
+        isPremium: currentUser.isPremium || isDemoPremium,
+        caption: isPermanent ? "📌 Post permanent (ne disparaît jamais)" : "Mon nouveau post 📸"
     };
     
     posts.unshift(newPost);
@@ -279,7 +267,11 @@ function createPost(mediaType, viewLimit) {
         newPost.status = "active";
         savePosts();
         renderFeed();
-        showNotification(`✅ Ton post a été vérifié et publié ! ${viewLimit} vues max.`, 'success');
+        if (isPermanent) {
+            showNotification(`✅ Ton post permanent a été vérifié et publié ! Il ne disparaîtra jamais.`, 'success');
+        } else {
+            showNotification(`✅ Ton post a été vérifié et publié ! ${viewLimit} vues max.`, 'success');
+        }
     }, 2000);
 }
 
@@ -301,6 +293,81 @@ function showNotification(message, type = 'info') {
 }
 
 // ============================================
+// GESTION DU SWITCH FREEMIUM/PREMIUM
+// ============================================
+
+function updatePremiumUI() {
+    const isPremium = isDemoPremium;
+    const premiumBanner = document.getElementById('premiumBanner');
+    const premiumFeaturesDemo = document.getElementById('premiumFeaturesDemo');
+    const customQuotaContainer = document.getElementById('customQuotaContainer');
+    const permanentOption = document.getElementById('permanentOption');
+    const premiumNote = document.getElementById('premiumNote');
+    const freemiumLabel = document.querySelector('.freemium-label');
+    const premiumLabel = document.querySelector('.premium-label');
+    
+    // Mettre à jour les labels du switch
+    if (freemiumLabel) {
+        freemiumLabel.classList.toggle('active', !isPremium);
+    }
+    if (premiumLabel) {
+        premiumLabel.classList.toggle('active', isPremium);
+    }
+    
+    // Afficher/masquer les éléments UI
+    if (premiumBanner) {
+        premiumBanner.classList.toggle('hidden', isPremium);
+    }
+    if (premiumFeaturesDemo) {
+        premiumFeaturesDemo.classList.toggle('hidden', !isPremium);
+    }
+    if (customQuotaContainer) {
+        customQuotaContainer.style.display = isPremium ? 'block' : 'none';
+    }
+    if (permanentOption) {
+        permanentOption.style.display = isPremium ? 'block' : 'none';
+    }
+    if (premiumNote) {
+        if (isPremium) {
+            premiumNote.innerHTML = '⭐ Mode Premium actif : quotas personnalisés (1 à 1M) + posts permanents disponibles !';
+            premiumNote.style.background = 'rgba(16, 185, 129, 0.1)';
+            premiumNote.style.color = '#10b981';
+        } else {
+            premiumNote.innerHTML = '⭐ Passez en mode Premium (switch ci-dessus) pour découvrir : quotas personnalisés, posts permanents';
+            premiumNote.style.background = 'rgba(139, 92, 246, 0.1)';
+            premiumNote.style.color = '#8b5cf6';
+        }
+    }
+    
+    renderFeed();
+}
+
+function initPremiumSwitch() {
+    const switchInput = document.getElementById('premiumSwitch');
+    const bannerUpgradeBtn = document.getElementById('bannerUpgradeBtn');
+    
+    if (switchInput) {
+        switchInput.checked = isDemoPremium;
+        switchInput.addEventListener('change', (e) => {
+            isDemoPremium = e.target.checked;
+            updatePremiumUI();
+            showNotification(isDemoPremium ? '⭐ Mode Premium activé ! Découvrez les fonctionnalités exclusives' : '📱 Mode Freemium activé', 'info');
+        });
+    }
+    
+    if (bannerUpgradeBtn) {
+        bannerUpgradeBtn.addEventListener('click', () => {
+            if (switchInput) {
+                switchInput.checked = true;
+                isDemoPremium = true;
+                updatePremiumUI();
+                showNotification('⭐ Mode Premium activé ! Découvrez les fonctionnalités exclusives', 'success');
+            }
+        });
+    }
+}
+
+// ============================================
 // RENDU DU FEED
 // ============================================
 
@@ -308,9 +375,6 @@ function renderFeed() {
     const feed = document.getElementById('feed');
     if (!feed) return;
     
-    // Filtrer les posts : 
-    // - actifs (non évaporés)
-    // - non vus par l'utilisateur (viewedPosts)
     const visiblePosts = posts.filter(p => 
         (p.status === 'active' || p.status === 'pending') && 
         !viewedPosts.includes(p.id)
@@ -333,9 +397,10 @@ function renderFeed() {
     }
     
     feed.innerHTML = visiblePosts.map(post => {
-        const progress = post.status === 'active' ? (post.viewCount / post.viewLimit) * 100 : 0;
-        const remaining = post.status === 'active' ? post.viewLimit - post.viewCount : 0;
+        const progress = post.status === 'active' && post.type === 'ephemeral' ? (post.viewCount / post.viewLimit) * 100 : 0;
+        const remaining = post.status === 'active' && post.type === 'ephemeral' ? post.viewLimit - post.viewCount : null;
         const isPending = post.status === 'pending';
+        const isPermanent = post.type === 'permanent';
         
         if (isPending) {
             return `
@@ -358,15 +423,15 @@ function renderFeed() {
             `;
         }
         
-        // Le post n'a pas encore été vu par l'utilisateur
         return `
-            <div class="post-card" data-post-id="${post.id}">
+            <div class="post-card ${isPermanent ? 'premium-feature' : ''}" data-post-id="${post.id}">
                 <div class="post-header">
                     <div class="post-avatar">${post.userAvatar}</div>
                     <div class="post-user">
                         <div class="post-name">
                             ${post.userName}
                             ${post.isPremium ? '<span class="post-badge">⭐ Premium</span>' : ''}
+                            ${isPermanent ? '<span class="post-badge premium-active">📌 Permanent</span>' : ''}
                         </div>
                         <div class="post-time">${formatTime(post.createdAt)}</div>
                     </div>
@@ -380,33 +445,39 @@ function renderFeed() {
                             <span>🔒</span>
                             <p>Cliquez pour révéler l'image</p>
                             <small>⏱️ Visualisation 5 secondes</small>
-                            <small>💨 Le post disparaîtra après</small>
+                            ${!isPermanent ? '<small>💨 Le post disparaîtra après</small>' : '<small>📌 Post permanent</small>'}
                         </div>
                     </div>
                 </div>
-                <div class="view-counter">
-                    <span>👁️ ${post.viewCount} / ${post.viewLimit} vues</span>
-                    <div class="view-progress">
-                        <div class="view-progress-fill" style="width: ${progress}%;"></div>
+                ${!isPermanent ? `
+                    <div class="view-counter">
+                        <span>👁️ ${post.viewCount} / ${post.viewLimit} vues</span>
+                        <div class="view-progress">
+                            <div class="view-progress-fill" style="width: ${progress}%;"></div>
+                        </div>
+                        <span>💨 ${remaining} restantes</span>
                     </div>
-                    <span>💨 ${remaining} restantes</span>
-                </div>
+                ` : `
+                    <div class="view-counter">
+                        <span>📌 Post permanent</span>
+                        <span>⭐ Premium</span>
+                    </div>
+                `}
                 <div class="post-actions">
                     <button class="action-btn" onclick="viewPost(${post.id})">
                         👁️ Voir (5s)
                     </button>
                     <button class="action-btn">
-                        🔄 ${post.viewCount} vues
+                        🔄 ${post.type === 'permanent' ? '∞' : post.viewCount} vues
                     </button>
                     <button class="action-btn">
-                        ⚡ ${post.viewLimit} quota
+                        ⚡ ${post.type === 'permanent' ? '∞' : post.viewLimit} quota
                     </button>
                 </div>
             </div>
         `;
     }).join('');
     
-    // Réattacher les événements pour les médias non vus
     document.querySelectorAll('.post-card').forEach(card => {
         const postId = parseInt(card.dataset.postId);
         const post = posts.find(p => p.id === postId);
@@ -425,7 +496,7 @@ function renderFeed() {
 }
 
 // ============================================
-// INITIALISATION
+// INITIALISATION DE LA MODALE DE CRÉATION
 // ============================================
 
 function initCreateModal() {
@@ -436,6 +507,8 @@ function initCreateModal() {
     const publishBtn = document.getElementById('publishPost');
     const quotaOptions = document.querySelectorAll('.quota-option');
     const mediaPreview = document.getElementById('mediaPreview');
+    const customQuotaInput = document.getElementById('customQuotaInput');
+    const permanentCheckbox = document.getElementById('permanentCheckbox');
     
     let selectedQuota = 100;
     let selectedMedia = 'photo';
@@ -453,8 +526,18 @@ function initCreateModal() {
             quotaOptions.forEach(o => o.classList.remove('selected'));
             opt.classList.add('selected');
             selectedQuota = parseInt(opt.dataset.quota);
+            if (customQuotaInput) customQuotaInput.value = '';
         };
     });
+    
+    if (customQuotaInput) {
+        customQuotaInput.addEventListener('input', (e) => {
+            if (e.target.value) {
+                quotaOptions.forEach(o => o.classList.remove('selected'));
+                selectedQuota = parseInt(e.target.value);
+            }
+        });
+    }
     
     if (mediaPreview) {
         mediaPreview.onclick = () => {
@@ -467,41 +550,40 @@ function initCreateModal() {
     
     if (publishBtn) {
         publishBtn.onclick = () => {
-            if (!currentUser.isPremium && ![100, 500, 1000].includes(selectedQuota)) {
-                showNotification('⭐ Premium requis pour ce quota. Choisissez 100, 500 ou 1000', 'warning');
+            let finalQuota = selectedQuota;
+            let isPermanent = false;
+            
+            if (isDemoPremium && permanentCheckbox && permanentCheckbox.checked) {
+                isPermanent = true;
+            } else if (isDemoPremium && customQuotaInput && customQuotaInput.value) {
+                finalQuota = Math.min(Math.max(parseInt(customQuotaInput.value), 1), 1000000);
+            } else if (!isDemoPremium && ![100, 500, 1000].includes(selectedQuota)) {
+                showNotification('En mode Freemium, choisissez 100, 500 ou 1000 vues. Activez le mode Premium pour des quotas personnalisés !', 'warning');
                 return;
             }
-            createPost(selectedMedia, selectedQuota);
+            
+            createPost(selectedMedia, finalQuota, isPermanent);
             closeModal();
+            
+            if (permanentCheckbox) permanentCheckbox.checked = false;
+            if (customQuotaInput) customQuotaInput.value = '';
+            quotaOptions.forEach(o => o.classList.remove('selected'));
+            document.querySelector('.quota-option[data-quota="100"]')?.classList.add('selected');
+            selectedQuota = 100;
         };
     }
 }
 
-function updatePremiumNote() {
-    const premiumNote = document.getElementById('premiumNote');
-    if (premiumNote) {
-        if (currentUser.isPremium) {
-            premiumNote.innerHTML = '⭐ Premium actif : vous pouvez choisir n\'importe quel nombre de vues (1 à 1 000 000)';
-            premiumNote.style.background = 'rgba(16, 185, 129, 0.1)';
-            premiumNote.style.color = '#10b981';
-        } else {
-            premiumNote.innerHTML = '⭐ Premium : choisissez n\'importe quel nombre de vues (1 à 1M)';
-            premiumNote.style.background = 'rgba(139, 92, 246, 0.1)';
-            premiumNote.style.color = '#8b5cf6';
-        }
+function updateUserAvatar() {
+    const avatarElement = document.getElementById('userAvatar');
+    if (avatarElement) {
+        avatarElement.textContent = currentUser.avatar;
     }
 }
 
 function initActionButtons() {
-    const upgradeBtn = document.getElementById('upgradeBtn');
     const notifBtn = document.getElementById('notifBtn');
     const resetBtn = document.getElementById('resetBtn');
-    
-    if (upgradeBtn) {
-        upgradeBtn.onclick = () => {
-            showNotification('⭐ Premium : 4,99€/mois - quotas personnalisés, groupes illimités, posts permanents', 'info');
-        };
-    }
     
     if (notifBtn) {
         notifBtn.onclick = () => {
@@ -523,23 +605,17 @@ function initActionButtons() {
     }
 }
 
-function updateUserAvatar() {
-    const avatarElement = document.getElementById('userAvatar');
-    if (avatarElement) {
-        avatarElement.textContent = currentUser.avatar;
-    }
-}
-
 function init() {
     loadData();
     updateUserAvatar();
     initCreateModal();
     initActionButtons();
-    updatePremiumNote();
+    initPremiumSwitch();
+    updatePremiumUI();
     renderFeed();
     
     setTimeout(() => {
-        showNotification('👋 Bienvenue sur Echoes ! Cliquez sur une image pour la voir (5s), puis elle disparaîtra', 'info');
+        showNotification('👋 Bienvenue sur Echoes ! Activez le mode Premium (switch) pour découvrir les fonctionnalités exclusives', 'info');
     }, 500);
 }
 
